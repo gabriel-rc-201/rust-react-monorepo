@@ -193,7 +193,7 @@ async fn update_todo(
     )})?;
 
     Ok((
-        StatusCode::CREATED,
+        StatusCode::OK,
         json!({"success": true, "data": updated_todo}).to_string()
     ))
 }
@@ -202,6 +202,18 @@ async fn delete_todo(
     State(pg_pool): State<PgPool>,
     Path(id): Path<Uuid>
 ) -> Result<(StatusCode, String), (StatusCode, String)> {
-    todo!()
+    sqlx::query("DELETE FROM tarefas WHERE id = $1")
+        .bind(id)
+        .execute(&pg_pool)
+        .await
+        .map_err(|e| {(
+            StatusCode::INTERNAL_SERVER_ERROR,
+            json!({"success": false, "message": e.to_string()}).to_string()
+        )})?;
+
+    Ok((
+        StatusCode::OK,
+        json!({"success": true, "message": "tarefa deletada com sucesso"}).to_string()
+    ))
 }
 

@@ -1,8 +1,7 @@
 use axum:: {
     extract::{Path, State},
-    handler::Handler,
     http::StatusCode,
-    routing::{delete, get, patch, put, post},
+    routing::{get, put},
     Json,
     Router,
     serve
@@ -12,7 +11,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use sqlx::{postgres::PgPoolOptions, PgPool};
 use tokio::net::TcpListener;
-use chrono::{DateTime, NaiveDate, NaiveDateTime, Utc};
+use chrono::{NaiveDate, NaiveDateTime, Utc};
 use uuid::Uuid;
 
 #[tokio::main]
@@ -42,8 +41,7 @@ async fn main() {
             .post(create_todo)
         )
         .route("/todo/{id}",
-            get(get_todo)
-            .put(update_todo)
+            put(update_todo)
             .delete(delete_todo)
         )
         .with_state(db_pool);
@@ -92,12 +90,6 @@ async fn get_todos(
             "data": todos
         }).to_string(),
     ))
-}
-
-async fn get_todo(
-    State(pg_pool): State<PgPool>
-) -> Result<(StatusCode, String), (StatusCode, String)> {
-    todo!()
 }
 
 #[derive(Deserialize)]

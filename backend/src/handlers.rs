@@ -10,6 +10,7 @@ use sqlx::{ PgPool};
 use chrono::{NaiveDate, NaiveDateTime, Utc};
 use uuid::Uuid;
 
+#[allow(non_camel_case_types)]
 #[derive(Debug, serde::Serialize, sqlx::Type)]
 #[sqlx(type_name = "\"EnumStatus\"", rename_all = "SCREAMING_SNAKE_CASE")]
 enum EnumStatus {

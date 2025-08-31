@@ -50,7 +50,7 @@ pub async fn get_tarefas(
             json!({"success": false, "message": e.to_string()}).to_string()
         ))?;
 
-    let tarefas_json: Vec<TarefaDTO> = tarefas_db.iter().map(|tarefa| {
+    let tarefas_dto: Vec<TarefaDTO> = tarefas_db.iter().map(|tarefa| {
         to_tarefa_dto(tarefa.clone())
     }).collect();
 
@@ -58,7 +58,7 @@ pub async fn get_tarefas(
         StatusCode::OK,
         json!({
             "success": true,
-            "data": tarefas_json
+            "data": tarefas_dto
         }).to_string(),
     ))
 }

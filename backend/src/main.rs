@@ -1,5 +1,4 @@
 mod handlers;
-mod entities;
 use crate::handlers::AppState;
 
 use axum:: {
@@ -45,10 +44,9 @@ async fn main() {
 
     let addr = listener.local_addr().expect("Failed to get local address");
 
+    println!("Server is running on {}", addr);
+
     serve(listener, app)
         .await
         .expect("Error serving application");
-
-    println!("Server is running on {}", addr);
-
 }

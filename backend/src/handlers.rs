@@ -10,8 +10,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use chrono::{NaiveDate, NaiveDateTime};
 use uuid::Uuid;
-use crate::entities::{ prelude::Tarefas, tarefas };
-use crate::entities::sea_orm_active_enums::EnumStatus;
+use entities::{ prelude::Tarefas, tarefas };
+use entities::sea_orm_active_enums::EnumStatus;
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, serde::Serialize)]

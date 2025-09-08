@@ -389,7 +389,7 @@ dependencies = [
  "axum",
  "chrono",
  "dotenvy",
- "entities",
+ "repositories",
  "sea-orm",
  "sea-orm-cli",
  "sea-orm-migration",
@@ -805,19 +805,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
 dependencies = [
  "serde",
-]
-
-[[package]]
-name = "entities"
-version = "0.0.0"
-dependencies = [
- "chrono",
- "sea-orm",
- "sea-orm-migration",
- "serde",
- "serde_json",
- "tokio",
- "uuid",
 ]
 
 [[package]]
@@ -2158,6 +2145,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "71fe3824f5629716b1589be05dacd749f6aa084c87e00e016714a8cdfccc997c"
 dependencies = [
  "bytecheck",
+]
+
+[[package]]
+name = "repositories"
+version = "0.0.0"
+dependencies = [
+ "chrono",
+ "sea-orm",
+ "sea-orm-migration",
+ "serde",
+ "serde_json",
+ "tokio",
+ "uuid",
 ]
 
 [[package]]

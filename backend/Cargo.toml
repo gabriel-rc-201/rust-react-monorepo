@@ -20,7 +20,7 @@ sea-orm = { version = "1.1.0", features = [
   "with-chrono"
 ] }
 
-entities = {path = "entities"}
+repositories = {path = "repositories"}
 
 [dev-dependencies]
 sea-orm-cli = "1.1.0"

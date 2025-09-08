@@ -1,9 +1,9 @@
 [package]
-name = "entities"
+name = "repositories"
 edition = "2024"
 
 [lib]
-name = "entities"
+name = "repositories"
 path = "src/lib.rs"
 
 [dependencies]

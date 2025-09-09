@@ -1,5 +1,5 @@
 mod handlers;
-use crate::handlers::AppState;
+use crate::handlers::{AppState, TarefaHandler};
 
 use axum:: {
     routing::{get, put},
@@ -26,10 +26,12 @@ async fn main() {
 
     let app_state = AppState::new(db_conn);
 
+    let tarefa_handler = TarefaHandler::new(app_state.clone());
+
     let app = Router::new()
         .route("/", get(|| async {"Hello World!"}))
         .route("/todos", 
-            get(handlers::get_tarefas)
+            get(|| async move {tarefa_handler.get_tarefas().await})
             .post(handlers::criar_tarefa)
         )
         .route("/todo/{id}",

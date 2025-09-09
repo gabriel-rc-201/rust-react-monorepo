@@ -10,8 +10,12 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use chrono::{NaiveDate, NaiveDateTime};
 use uuid::Uuid;
-use repositories::{ prelude::Tarefas, tarefas };
-use repositories::sea_orm_active_enums::EnumStatus;
+use repositories::{
+    entities::prelude::Tarefas,
+    entities::tarefas,
+    tarefas_repository::TarefasRepository
+};
+use repositories::entities::sea_orm_active_enums::EnumStatus;
 
 #[allow(non_camel_case_types)]
 #[derive(Debug, serde::Serialize)]
@@ -35,33 +39,42 @@ struct TarefaDTO { // entidade que descreve o dado no banco
 
 const USUARIO_ID_MOCK: &str = "0f8d6d1f-272e-43e9-ad54-2351bdec5192";
 
-pub async fn get_tarefas(
-    State(app_state): State<AppState>
-) -> Result<(StatusCode, String), (StatusCode, String)> {
-    let usuario_id = Uuid::parse_str(USUARIO_ID_MOCK).unwrap();
-
-    let tarefas_db = Tarefas::find()
-        .filter(tarefas::Column::UsuarioId.eq(usuario_id))
-        .order_by_asc(tarefas::Column::Praso)
-        .all(&app_state.db_conn)
-        .await
-        .map_err(|e| (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            json!({"success": false, "message": e.to_string()}).to_string()
-        ))?;
-
-    let tarefas_dto: Vec<TarefaDTO> = tarefas_db.iter().map(|tarefa| {
-        to_tarefa_dto(tarefa.clone())
-    }).collect();
-
-    Ok((
-        StatusCode::OK,
-        json!({
-            "success": true,
-            "data": tarefas_dto
-        }).to_string(),
-    ))
+#[derive(Clone)]
+pub struct TarefaHandler {
+    tarefa_repository: TarefasRepository
 }
+
+impl TarefaHandler {
+    pub fn new(app_state: AppState) -> Self {
+        TarefaHandler {
+            tarefa_repository: TarefasRepository::new(app_state.db_conn.clone())
+        }
+    }
+
+    pub async fn get_tarefas(&self) -> Result<(StatusCode, String), (StatusCode, String)> {
+        let usuario_id = Uuid::parse_str(USUARIO_ID_MOCK).unwrap();
+    
+        let tarefas_db = self.tarefa_repository.get_tarefas(usuario_id)
+            .await
+            .map_err(|e| (
+                StatusCode::INTERNAL_SERVER_ERROR,
+                json!({"success": false, "message": e.to_string()}).to_string()
+            ))?;
+    
+        let tarefas_dto: Vec<TarefaDTO> = tarefas_db.iter().map(|tarefa| {
+            to_tarefa_dto(tarefa.clone())
+        }).collect();
+    
+        Ok((
+            StatusCode::OK,
+            json!({
+                "success": true,
+                "data": tarefas_dto
+            }).to_string(),
+        ))
+    }
+}
+
 
 #[derive(Deserialize)]
 pub struct TodoInput { // objeto que representa a entrada para criação de uma tarefa

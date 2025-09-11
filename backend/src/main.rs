@@ -2,12 +2,15 @@ use std::sync::Arc;
 mod tarefa_fachada;
 mod todo_dtos;
 use crate::{
-  tarefa_fachada::{TarefaFachada},
+  tarefa_fachada::TarefaFachada,
   todo_dtos::{TodoInputDto, TodoUpdateInputDto},
 };
 
 use axum::{
-  extract::{Path, State}, routing::{get, post, put}, serve, Json, Router
+  Json, Router,
+  extract::{Path, State},
+  routing::{get, post, put},
+  serve,
 };
 use dotenvy::dotenv;
 use sea_orm::{ConnectOptions, Database};
@@ -43,22 +46,28 @@ async fn main() {
     .route(
       "/todo",
       post(
-        |State(app_state): State<AppState>,
-        Json(nova_tarefa): Json<TodoInputDto>| async move {
+        |State(app_state): State<AppState>, Json(nova_tarefa): Json<TodoInputDto>| async move {
           app_state.tarefa_fachada.criar_tarefa(nova_tarefa).await
         },
       ),
     )
     .route(
       "/todo/{id}",
-      put(|State(app_state): State<AppState>,
-      Path(id): Path<Uuid>, Json(tarefa_dto): Json<TodoUpdateInputDto>| async move {
-        app_state.tarefa_fachada.atualizar_tarefa(id, tarefa_dto).await
-      })
-      .delete(|State(app_state): State<AppState>,
-      Path(id): Path<Uuid>| async move {
-        app_state.tarefa_fachada.deletar_tarefa(id).await
-      }),
+      put(
+        |State(app_state): State<AppState>,
+         Path(id): Path<Uuid>,
+         Json(tarefa_dto): Json<TodoUpdateInputDto>| async move {
+          app_state
+            .tarefa_fachada
+            .atualizar_tarefa(id, tarefa_dto)
+            .await
+        },
+      )
+      .delete(
+        |State(app_state): State<AppState>, Path(id): Path<Uuid>| async move {
+          app_state.tarefa_fachada.deletar_tarefa(id).await
+        },
+      ),
     )
     .with_state(app_state);
 
@@ -82,9 +91,6 @@ struct AppState {
 
 impl AppState {
   fn new(tarefa_fachada: Arc<TarefaFachada>) -> Self {
-    AppState {
-      tarefa_fachada,
-    }
+    AppState { tarefa_fachada }
   }
 }
-

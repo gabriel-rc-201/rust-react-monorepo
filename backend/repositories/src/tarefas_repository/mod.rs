@@ -2,7 +2,8 @@ use uuid::Uuid;
 
 use crate::entities::{prelude::Tarefas, tarefas};
 use sea_orm::{
-  ActiveModelTrait, ColumnTrait, DatabaseConnection, DeleteResult, EntityTrait, QueryFilter, QueryOrder
+  ActiveModelTrait, ColumnTrait, DatabaseConnection, DeleteResult, EntityTrait, QueryFilter,
+  QueryOrder,
 };
 
 #[derive(Clone)]
@@ -30,19 +31,21 @@ impl TarefasRepository {
     nova_tarefa.insert(&self.db_conn).await
   }
 
-  pub async fn find_by_id(&self, tarefa_id: Uuid) -> Result<std::option::Option<tarefas::Model>, sea_orm::DbErr> {
-    Tarefas::find_by_id(tarefa_id)
-      .one(&self.db_conn)
-      .await
+  pub async fn find_by_id(
+    &self,
+    tarefa_id: Uuid,
+  ) -> Result<std::option::Option<tarefas::Model>, sea_orm::DbErr> {
+    Tarefas::find_by_id(tarefa_id).one(&self.db_conn).await
   }
 
-  pub async fn atualizar_tarefa(&self, tarefa_atualizada: tarefas::ActiveModel) -> Result<tarefas::Model, sea_orm::DbErr> {
+  pub async fn atualizar_tarefa(
+    &self,
+    tarefa_atualizada: tarefas::ActiveModel,
+  ) -> Result<tarefas::Model, sea_orm::DbErr> {
     tarefa_atualizada.update(&self.db_conn).await
   }
 
   pub async fn deletar_tarefa(&self, id: Uuid) -> Result<DeleteResult, sea_orm::DbErr> {
-    Tarefas::delete_by_id(id)
-      .exec(&self.db_conn)
-      .await
+    Tarefas::delete_by_id(id).exec(&self.db_conn).await
   }
 }

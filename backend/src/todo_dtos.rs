@@ -38,4 +38,3 @@ pub struct TodoUpdateInputDto {
   pub descricao: Option<String>,
   pub praso: Option<NaiveDate>,
 }
-

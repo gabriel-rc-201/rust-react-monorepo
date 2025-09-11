@@ -1,10 +1,6 @@
-use axum::{
-  http::StatusCode,
-};
+use axum::http::StatusCode;
 use repositories::entities::sea_orm_active_enums::EnumStatus;
-use repositories::{
-  entities::tarefas, tarefas_repository::TarefasRepository,
-};
+use repositories::{entities::tarefas, tarefas_repository::TarefasRepository};
 use sea_orm::{ActiveValue, DatabaseConnection, IntoActiveModel};
 use serde_json::json;
 use uuid::Uuid;
@@ -86,19 +82,20 @@ impl TarefaFachada {
     ))
   }
 
-
   pub async fn atualizar_tarefa(
     &self,
     id: Uuid,
     tarefa: TodoUpdateInputDto,
   ) -> Result<(StatusCode, String), (StatusCode, String)> {
-    let tarefa_bd: tarefas::Model = self.tarefa_repository.find_by_id(id)
+    let tarefa_bd: tarefas::Model = self
+      .tarefa_repository
+      .find_by_id(id)
       .await
       .map_err(|e| {
-      (
-        StatusCode::NOT_FOUND,
-        json!({"success": false, "message": e.to_string()}).to_string(),
-      )
+        (
+          StatusCode::NOT_FOUND,
+          json!({"success": false, "message": e.to_string()}).to_string(),
+        )
       })?
       .expect("tarefa não encontrada");
 
@@ -114,13 +111,15 @@ impl TarefaFachada {
       tarefa_active_model.praso = ActiveValue::set(praso);
     }
 
-    let tarefa_atualizada = self.tarefa_repository.atualizar_tarefa(tarefa_active_model)
+    let tarefa_atualizada = self
+      .tarefa_repository
+      .atualizar_tarefa(tarefa_active_model)
       .await
       .map_err(|e| {
-      (
-        StatusCode::INTERNAL_SERVER_ERROR,
-        json!({"success": false, "message": e.to_string()}).to_string(),
-      )
+        (
+          StatusCode::INTERNAL_SERVER_ERROR,
+          json!({"success": false, "message": e.to_string()}).to_string(),
+        )
       })?;
 
     Ok((
@@ -133,7 +132,9 @@ impl TarefaFachada {
     &self,
     id: Uuid,
   ) -> Result<(StatusCode, String), (StatusCode, String)> {
-    self.tarefa_repository.deletar_tarefa(id)
+    self
+      .tarefa_repository
+      .deletar_tarefa(id)
       .await
       .map_err(|e| {
         (
@@ -148,7 +149,6 @@ impl TarefaFachada {
     ))
   }
 }
-
 
 fn to_enum_status_dto(status: EnumStatus) -> EnumStatusDTO {
   match status {

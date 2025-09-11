@@ -6,33 +6,33 @@ use sea_orm::entity::prelude::*;
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, serde::Serialize)]
 #[sea_orm(table_name = "tarefas")]
 pub struct Model {
-    #[sea_orm(primary_key, auto_increment = false)]
-    pub id: Uuid,
-    pub usuario_id: Uuid,
-    pub titulo: String,
-    pub descricao: String,
-    pub status: EnumStatus,
-    pub praso: Date,
-    pub created_at: DateTime,
-    pub updated_at: DateTime,
+  #[sea_orm(primary_key, auto_increment = false)]
+  pub id: Uuid,
+  pub usuario_id: Uuid,
+  pub titulo: String,
+  pub descricao: String,
+  pub status: EnumStatus,
+  pub praso: Date,
+  pub created_at: DateTime,
+  pub updated_at: DateTime,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(
-        belongs_to = "super::usuarios::Entity",
-        from = "Column::UsuarioId",
-        to = "super::usuarios::Column::Id",
-        on_update = "NoAction",
-        on_delete = "Cascade"
-    )]
-    Usuarios,
+  #[sea_orm(
+    belongs_to = "super::usuarios::Entity",
+    from = "Column::UsuarioId",
+    to = "super::usuarios::Column::Id",
+    on_update = "NoAction",
+    on_delete = "Cascade"
+  )]
+  Usuarios,
 }
 
 impl Related<super::usuarios::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::Usuarios.def()
-    }
+  fn to() -> RelationDef {
+    Relation::Usuarios.def()
+  }
 }
 
 impl ActiveModelBehavior for ActiveModel {}

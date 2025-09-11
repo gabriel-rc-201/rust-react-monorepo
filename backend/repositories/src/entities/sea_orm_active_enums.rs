@@ -5,10 +5,10 @@ use sea_orm::entity::prelude::*;
 #[derive(Debug, Clone, PartialEq, Eq, EnumIter, DeriveActiveEnum, serde::Serialize)]
 #[sea_orm(rs_type = "String", db_type = "Enum", enum_name = "enum_status")]
 pub enum EnumStatus {
-    #[sea_orm(string_value = "TODO")]
-    Todo,
-    #[sea_orm(string_value = "IN_PROGRESS")]
-    InProgress,
-    #[sea_orm(string_value = "COMPLETED")]
-    Completed,
+  #[sea_orm(string_value = "TODO")]
+  Todo,
+  #[sea_orm(string_value = "IN_PROGRESS")]
+  InProgress,
+  #[sea_orm(string_value = "COMPLETED")]
+  Completed,
 }

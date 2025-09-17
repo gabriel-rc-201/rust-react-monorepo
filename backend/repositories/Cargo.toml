@@ -9,6 +9,8 @@ path = "src/lib.rs"
 [dependencies]
 chrono = { version = "0.4.41", features = ["serde"] }
 
+task_domain = {path = "../task_domain"}
+
 tokio = { version = "1.47.1", features = ["macros", "rt-multi-thread"] }
 uuid = {version = "1.18.0", features = ["v4", "serde"]}
 
